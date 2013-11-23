@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  #game
+
+  script(type='text/javascript', src='http://codeorigin.jquery.com/jquery-2.0.3.js')
+  != js('underscore')
+  != js('crafty')
+  != js('create_mocks_module')
+  != js('tiledmapbuilder')
+
+  != js('desert-map')
+  != js('game')
+
+  script(type='text/javascript').
+    window.addEventListener('load', Game.start);

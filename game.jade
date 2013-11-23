@@ -1,0 +1,9 @@
+doctype 5
+html(lang="en")
+  head
+    title="Bio Roguelike"
+  body
+    #game
+    != js('crafty')
+    script(type="text/javascript).
+      Crafty.init(500,350, document.getElementById('game'));
