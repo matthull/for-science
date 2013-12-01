@@ -6,11 +6,10 @@ block content
   script(type='text/javascript', src='http://codeorigin.jquery.com/jquery-2.0.3.js')
   != js('underscore')
   != js('crafty')
-  != js('create_mocks_module')
-  != js('tiledmapbuilder')
 
   script(type='text/javascript').
     window.grassland = {}
+    window.Game = {}
   != js('empty-grassland-map-32x32')
   != js('empty-grassland-map-64x64')
   != js('empty-grassland-map-96x96')
