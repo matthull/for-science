@@ -9,7 +9,12 @@ block content
   != js('create_mocks_module')
   != js('tiledmapbuilder')
 
-  != js('desert-map')
+  script(type='text/javascript').
+    window.grassland = {}
+  != js('empty-grassland-map-32x32')
+  != js('empty-grassland-map-64x64')
+  != js('empty-grassland-map-96x96')
+  != js('empty-grassland-map-128x128')
   != js('game')
 
   script(type='text/javascript').
