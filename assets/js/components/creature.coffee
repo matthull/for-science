@@ -1,3 +1,3 @@
 Crafty.c 'Creature',
   creature: (attributes) ->
-    this.attributes = attributes
+    this.attributes = Game.Attributes.create attributes

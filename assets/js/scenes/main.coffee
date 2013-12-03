@@ -13,4 +13,8 @@ Crafty.scene 'Main', ->
 
   Game.pc.act()
 
+  Game.sidebar = Crafty.e 'Sidebar'
+
   Crafty.viewport.follow Game.pc, 0, 0
+
+  Game.Router.router.transitionTo '/start'

@@ -1,0 +1,34 @@
+@import 'fluidity'
+
+body {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#top-spacer {
+    height: 20px;
+}
+
+#game {
+    grid();
+
+    #cr-stage {
+        grid-space(65%);
+    }
+
+    .sidebar {
+        grid-space(35%);
+        float: right;
+        height: 640px;
+
+        .attribute {
+            height: 1.5em;
+        }
+
+        #log-readout {
+            height: 50%;
+        }
+    }
+}
+

@@ -1,15 +1,22 @@
 extends layout
 
 block content
-  #game
+  != css('game')
 
+  #top-spacer
+  #game
+    #cr-stage
   script(type='text/javascript', src='http://codeorigin.jquery.com/jquery-2.0.3.js')
   != js('underscore')
+  != js('handlebars')
+  script(type='text/javascript' src="http://builds.emberjs.com/release/ember.js")
   != js('crafty')
+  script(type='text/javascript', src='templates.js')
 
   script(type='text/javascript').
     window.grassland = {}
-    window.Game = {}
+    window.Game = Ember.Application.create({rootElement: '#game'});
+    //-window.Game = {}
   != js('empty-grassland-map-32x32')
   != js('empty-grassland-map-64x64')
   != js('empty-grassland-map-96x96')
@@ -17,4 +24,4 @@ block content
   != js('game')
 
   script(type='text/javascript').
-    window.addEventListener('load', Game.start);
+    window.addEventListener('load', startGame);

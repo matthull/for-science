@@ -26,6 +26,12 @@ app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 604800 }));
 
 app.use(require('connect-assets')());
+var fluidity = require('fluidity');
+var ember_handlebars = require('express-ember-handlebars');
+
+app.get('/templates.js', ember_handlebars(__dirname + '/assets/js/templates', {
+    cache: false
+}));
 
 // development only
 if ('development' == app.get('env')) {

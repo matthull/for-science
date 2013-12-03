@@ -8,8 +8,12 @@ Crafty.c 'Player',
       speed: 1
       focus: 1
       detection: 1
-      endurance: 2
-      hp: 1
+      endurance:
+        current: 2
+        max: 2
+      hp:
+        current: 2
+        max: 2
 
     this.bind 'KeyDown', (e) =>
       return unless @active

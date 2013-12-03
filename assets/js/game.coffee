@@ -1,8 +1,12 @@
 #= require_tree support
 #= require_tree components
 #= require_tree scenes
+#= require_tree models
+#= require_tree controllers
+#= require_tree views
+#= require router
 
-Game.start = ->
+window.startGame = ->
     engine = Game.engine = Crafty.e 'Engine'
     Crafty.init engine.mapHeight * engine.tileSize, engine.mapHeight * engine.tileSize
     Crafty.background '#000'
