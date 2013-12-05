@@ -8,7 +8,9 @@ Crafty.c 'Player',
       speed: 1
       focus: 1
       detection: 1
-      move: 2
+      move:
+        current: 0
+        max: 2
       endurance:
         current: 2
         max: 2

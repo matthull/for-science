@@ -5,7 +5,7 @@ Crafty.c 'Actor',
 
   act: ->
     this.activate()
-    @movementPoints = @attributes.move
+    @attributes.set 'move.current', @attributes.get('move.max')
     this._act() if typeof this._act == 'function'
 
   deactivate: ->
@@ -19,9 +19,9 @@ Crafty.c 'Actor',
     Crafty.trigger 'acted'
 
   moved: ->
-    @movementPoints--
+    @attributes.decrementProperty('move.current')
 
-    if @movementPoints == 0
+    if @attributes.get('move.current') == 0
       this.acted()
     else
       this.activate()
