@@ -15,12 +15,12 @@ block content
 
   script(type='text/javascript').
     window.grassland = {}
-    window.Game = Ember.Application.create({rootElement: '#game'});
-    //-window.Game = {}
+
   != js('empty-grassland-map-32x32')
   != js('empty-grassland-map-64x64')
   != js('empty-grassland-map-96x96')
   != js('empty-grassland-map-128x128')
+  != js('create-game')
   != js('game')
 
   script(type='text/javascript').

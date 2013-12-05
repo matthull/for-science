@@ -5,8 +5,13 @@ Crafty.c 'NPC',
       speed: 1
       focus: 1
       detection: 1
-      endurance: 4
-      hp: 3
+      move: 2
+      endurance:
+        current: 2
+        max: 2
+      hp:
+        current: 2
+        max: 2
 
     this.requires 'Tween'
     this.requires 'Actor'
@@ -14,27 +19,18 @@ Crafty.c 'NPC',
 
   _act: ->
     options = [ 'wait', 'move' ]
-    return @acted() if _.sample(options) == 'wait'
+    return this.acted() if _.sample(options) == 'wait'
 
-    directions = [
-      {vertical: 1, horizontal: 0},
-      {vertical: -1, horizontal: 0},
-      {vertical: 0, horizontal: -1},
-      {vertical: 0, horizontal: 1}
-    ]
+    destinations = _.map ['left', 'up', 'down', 'right'], (direction) =>
+      Game.map.relativeLocation
+        x: @x, y: @y,
+        direction,
+        tiles: 1
 
-    availableDirections = _.filter directions, (direction) =>
-      not _.some Crafty('Solid'), (e) =>
-        Crafty(e).isAt this.x + (direction.horizontal * Game.engine.tileSize) + 1, this.y + (direction.vertical * Game.engine.tileSize) + 1
+    availableDestinations = _.filter destinations, (destination) =>
+      (not _.some Crafty('Solid'), (e) => Crafty(e).isAt destination.x, destination.y) and (Game.map.inbounds destination)
 
-    availableDirections = _.filter availableDirections, (direction) =>
-      Game.map.inbounds this.x + (direction.horizontal * Game.engine.tileSize) + 1, this.y + (direction.vertical * Game.engine.tileSize) + 1
+    return this.acted() if availableDestinations.length == 0
+    chosenDestination = _.sample availableDestinations
 
-    return @acted() if availableDirections.length == 0
-    chosenDirection = _.sample availableDirections
-
-    destination = {}
-    destination.x = this.x + (chosenDirection.horizontal * Game.engine.tileSize)
-    destination.y = this.y + (chosenDirection.vertical * Game.engine.tileSize)
-
-    this.tween {x: destination.x, y: destination.y}, Game.engine.movementSpeed, => @acted()
+    this.tween {x: chosenDestination.x, y: chosenDestination.y}, Game.engine.movementSpeed, => this.moved()

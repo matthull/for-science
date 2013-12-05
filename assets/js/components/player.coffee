@@ -8,6 +8,7 @@ Crafty.c 'Player',
       speed: 1
       focus: 1
       detection: 1
+      move: 2
       endurance:
         current: 2
         max: 2
@@ -18,19 +19,26 @@ Crafty.c 'Player',
     this.bind 'KeyDown', (e) =>
       return unless @active
       @deactivate()
-      destination = { x: this.x, y: this.y }
-      if (e.key == Crafty.keys['H']) then destination.x = this.x - Game.engine.tileSize
-      if (e.key == Crafty.keys['L']) then destination.x = this.x + Game.engine.tileSize
-      if (e.key == Crafty.keys['J']) then destination.y = this.y + Game.engine.tileSize
-      if (e.key == Crafty.keys['K']) then destination.y = this.y - Game.engine.tileSize
+
+      if (e.key == Crafty.keys['H']) then direction = 'left'
+      if (e.key == Crafty.keys['K']) then direction = 'up'
+      if (e.key == Crafty.keys['L']) then direction = 'right'
+      if (e.key == Crafty.keys['J']) then direction = 'down'
+
+      if direction
+        destination = Game.map.relativeLocation
+          x: this.x, y: this.y,
+          direction,
+          tiles: 1
+
+        if (_.some Crafty('Solid'), (e) -> Crafty(e).isAt destination.x+1, destination.y+1)
+          this.activate()
+          return console.log 'Blocked by obstacle'
+
+        unless (Game.map.inbounds destination)
+          this.activate()
+          return console.log 'Blocked by edge of map'
+
+        this.moveTo destination
+
       if (e.key == Crafty.keys['PERIOD']) then console.log 'Waiting...'; return @acted()
-
-      if (_.some Crafty('Solid'), (e) -> Crafty(e).isAt destination.x+1, destination.y+1)
-        @act()
-        return console.log 'Blocked by obstacle'
-
-      unless (Game.map.inbounds(destination.x, destination.y))
-        @act()
-        return console.log 'Blocked by edge of map'
-
-      this.tween {x: destination.x, y: destination.y}, Game.engine.movementSpeed, => @acted()
