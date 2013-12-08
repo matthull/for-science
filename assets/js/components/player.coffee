@@ -27,7 +27,7 @@ Crafty.c 'Player',
     @abilities = [
       Game.Ability.create
         name: 'jog'
-        activatedBy: Crafty.keys['1']
+        activatedBy: '1'
         cooldown: 3
         enduring: true
         turnsUntilNextUse: 0
@@ -35,26 +35,51 @@ Crafty.c 'Player',
         effect: -> @owner.attributes.set('move.current', 2)
     ]
 
+    @moveKeys = [
+      activatedBy: 'H'
+      name: 'left'
+    ,
+      activatedBy: 'K'
+      name: 'up'
+    ,
+      activatedBy: 'L'
+      name: 'right'
+    ,
+      activatedBy: 'J'
+      name: 'down'
+    ,
+      activatedBy: 'LEFT_ARROW'
+      name: 'left'
+    ,
+      activatedBy: 'UP_ARROW'
+      name: 'up'
+    ,
+      activatedBy: 'RIGHT_ARROW'
+      name: 'right'
+    ,
+      activatedBy: 'DOWN_ARROW'
+      name: 'down'
+    ]
+
     this.bind 'KeyDown', (e) =>
       return unless @active
       this.deactivate()
 
-      if e.key == Crafty.keys['H'] then direction = 'left'
-      if e.key == Crafty.keys['K'] then direction = 'up'
-      if e.key == Crafty.keys['L'] then direction = 'right'
-      if e.key == Crafty.keys['J'] then direction = 'down'
+      ability = @abilities.filter((a) -> e.key == Crafty.keys[a.activatedBy])[0]
+      direction = @moveKeys.filter((m) -> e.key == Crafty.keys[m.activatedBy])[0]
 
       if e.key == Crafty.keys['PERIOD'] then Game.logger.info 'You wait...'; return this.acted()
+      return this.activate() unless ability or direction
 
-      ability = this.abilities.filter((a) -> e.key == a.activatedBy)[0]
       if ability
         Game.logger.info 'Attempting to activate ability: ' + ability.name
         ability.activate()
+        return this.activate()
 
       if direction
         destination = Game.map.relativeLocation
           x: this.x, y: this.y,
-          direction,
+          direction.name,
           tiles: 1
 
         if (_.some Crafty('Solid'), (e) -> Crafty(e).isAt destination.x+1, destination.y+1)
@@ -66,5 +91,3 @@ Crafty.c 'Player',
           return this.activate()
 
         this.moveTo destination
-
-      this.activate()

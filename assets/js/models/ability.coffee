@@ -2,6 +2,7 @@ Game.Ability = Ember.Object.extend
   activate: ->
     return Game.logger.info @turnsUntilNextUse + ' turns until ' + @name + ' is available' if @turnsUntilNextUse > 0
     this.effect()
+    Game.logger.info 'Ability ' + @name + ' activated'
     if @enduring
       #@owner.attributes.decrementProperty('endurance.current')
       die = [ 'endure', '-', '-', '-', '-', '-' ]
