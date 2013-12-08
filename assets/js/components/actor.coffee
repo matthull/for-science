@@ -7,7 +7,7 @@ Crafty.c 'Actor',
     this.activate()
     @attributes.set 'move.current', @attributes.get('move.max')
 
-    _.each @abilities, (a) -> a.turnsUntilNextUse-- if a.turnsUntilNextUse > 0
+    _.each @abilities, (a) -> a.decrementProperty('turnsUntilNextUse') if a.get('turnsUntilNextUse') > 0
 
     this._act() if typeof this._act == 'function'
 

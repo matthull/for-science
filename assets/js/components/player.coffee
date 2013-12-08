@@ -46,18 +46,10 @@ Crafty.c 'Player',
 
       action = @actions.filter((a) -> e.key == Crafty.keys[a.activatedBy])[0]
 
-      #if e.key == Crafty.keys['PERIOD'] then Game.logger.info 'You wait...'; return this.acted()
-      #return this.activate() unless ability or direction
-
-      #if ability
-        #Game.logger.info 'Attempting to activate ability: ' + ability.name
-        #ability.activate()
-        #return this.activate()
-
       return this.activate() unless action
 
       if action.type == 'ability'
-        @abilities[ability.name].activate()
+        @abilities[action.name].activate()
 
       if action.type == 'move'
         destination = Game.map.relativeLocation
@@ -112,7 +104,7 @@ Crafty.c 'Player',
       type: 'ability'
       name: 'movementAbilityOne'
     ,
-      activatedBy: '.'
+      activatedBy: 'PERIOD'
       type: 'ability'
       name: 'restAbilityOne'
     ]

@@ -1,9 +1,16 @@
 Game.Ability = Ember.Object.extend
   init: ->
-    @turnsUntilNextUse = 0
+    this.set 'turnsUntilNextUse', 0
+
+  available: (->
+    this.get('turnsUntilNextUse') == 0
+  ).property('turnsUntilNextUse')
 
   activate: ->
-    return Game.logger.info @turnsUntilNextUse + ' turns until ' + @name + ' is available' if @turnsUntilNextUse > 0
+    unless this.get('available')
+      @owner.activate()
+      return Game.logger.info this.get('turnsUntilNextUse') + ' turns until ' + @name + ' is available'
+
     this.effect()
     Game.logger.info 'Ability activated: ' + @name
     if @enduring
@@ -14,11 +21,11 @@ Game.Ability = Ember.Object.extend
 
     if @enduring and 'endure' in enduranceTest
       Game.logger.info 'Passed endurance test - cooldown cancelled for ' + @name
-      @turnsUntilNextUse = 1
+      this.set 'turnsUntilNextUse', 1
     else if @enduring
       Game.logger.info 'Failed endurance test for ' + @name + '. Cooldown in effect.'
-      @turnsUntilNextUse = @cooldown
+      this.set 'turnsUntilNextUse', this.get('cooldown')
     else
-      @turnsUntilNextUse = @cooldown
+      this.set 'turnsUntilNextUse', this.get('cooldown')
 
     if @endsTurn then @owner.acted() else @owner.activate()
