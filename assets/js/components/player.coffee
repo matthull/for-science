@@ -58,11 +58,11 @@ Crafty.c 'Player',
           tiles: 1
 
         if (_.some Crafty('Solid'), (e) -> Crafty(e).isAt destination.x+1, destination.y+1)
-          return Game.logger.info "You can't go there! Blocked by obstacle"
+          Game.logger.info "You can't go there! Blocked by obstacle"
           return this.activate()
 
         unless (Game.map.inbounds destination)
-          return Game.logger.info "You can't go there! Blocked by edge of map"
+          Game.logger.info "You can't go there! Blocked by edge of map"
           return this.activate()
 
         this.moveTo destination
