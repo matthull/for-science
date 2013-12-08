@@ -24,62 +24,45 @@ Crafty.c 'Player',
       instability:
         current: 0
 
-    @abilities = [
-      Game.Ability.create
-        name: 'jog'
-        activatedBy: '1'
-        cooldown: 3
-        enduring: true
-        turnsUntilNextUse: 0
-        owner: this
-        effect: -> @owner.attributes.set('move.current', 2)
-    ]
-
-    @moveKeys = [
-      activatedBy: 'H'
-      name: 'left'
-    ,
-      activatedBy: 'K'
-      name: 'up'
-    ,
-      activatedBy: 'L'
-      name: 'right'
-    ,
-      activatedBy: 'J'
-      name: 'down'
-    ,
-      activatedBy: 'LEFT_ARROW'
-      name: 'left'
-    ,
-      activatedBy: 'UP_ARROW'
-      name: 'up'
-    ,
-      activatedBy: 'RIGHT_ARROW'
-      name: 'right'
-    ,
-      activatedBy: 'DOWN_ARROW'
-      name: 'down'
-    ]
+    @abilities =
+      movementAbilityOne:
+        Game.Ability.create
+          name: 'Jog'
+          cooldown: 3
+          enduring: true
+          owner: this
+          effect: -> @owner.attributes.set('move.current', 2)
+      restAbilityOne:
+        Game.Ability.create
+          name: 'Wait'
+          cooldown: 1
+          endsTurn: true
+          owner: this
+          effect: -> Game.logger.info 'Player waiting...'
 
     this.bind 'KeyDown', (e) =>
       return unless @active
       this.deactivate()
 
-      ability = @abilities.filter((a) -> e.key == Crafty.keys[a.activatedBy])[0]
-      direction = @moveKeys.filter((m) -> e.key == Crafty.keys[m.activatedBy])[0]
+      action = @actions.filter((a) -> e.key == Crafty.keys[a.activatedBy])[0]
 
-      if e.key == Crafty.keys['PERIOD'] then Game.logger.info 'You wait...'; return this.acted()
-      return this.activate() unless ability or direction
+      #if e.key == Crafty.keys['PERIOD'] then Game.logger.info 'You wait...'; return this.acted()
+      #return this.activate() unless ability or direction
 
-      if ability
-        Game.logger.info 'Attempting to activate ability: ' + ability.name
-        ability.activate()
-        return this.activate()
+      #if ability
+        #Game.logger.info 'Attempting to activate ability: ' + ability.name
+        #ability.activate()
+        #return this.activate()
 
-      if direction
+      return this.activate() unless action
+
+      if action.type == 'ability'
+        @abilities[ability.name].activate()
+
+      if action.type == 'move'
         destination = Game.map.relativeLocation
           x: this.x, y: this.y,
-          direction.name,
+          action.name,
           tiles: 1
 
         if (_.some Crafty('Solid'), (e) -> Crafty(e).isAt destination.x+1, destination.y+1)
@@ -91,3 +74,45 @@ Crafty.c 'Player',
           return this.activate()
 
         this.moveTo destination
+
+    @actions = [
+      activatedBy: 'H'
+      type: 'move'
+      name: 'left'
+    ,
+      activatedBy: 'K'
+      type: 'move'
+      name: 'up'
+    ,
+      activatedBy: 'L'
+      type: 'move'
+      name: 'right'
+    ,
+      activatedBy: 'J'
+      type: 'move'
+      name: 'down'
+    ,
+      activatedBy: 'LEFT_ARROW'
+      type: 'move'
+      name: 'left'
+    ,
+      activatedBy: 'UP_ARROW'
+      type: 'move'
+      name: 'up'
+    ,
+      activatedBy: 'RIGHT_ARROW'
+      type: 'move'
+      name: 'right'
+    ,
+      activatedBy: 'DOWN_ARROW'
+      type: 'move'
+      name: 'down'
+    ,
+      activatedBy: '1'
+      type: 'ability'
+      name: 'movementAbilityOne'
+    ,
+      activatedBy: '.'
+      type: 'ability'
+      name: 'restAbilityOne'
+    ]

@@ -1,8 +1,11 @@
 Game.Ability = Ember.Object.extend
+  init: ->
+    @turnsUntilNextUse = 0
+
   activate: ->
     return Game.logger.info @turnsUntilNextUse + ' turns until ' + @name + ' is available' if @turnsUntilNextUse > 0
     this.effect()
-    Game.logger.info 'Ability ' + @name + ' activated'
+    Game.logger.info 'Ability activated: ' + @name
     if @enduring
       #@owner.attributes.decrementProperty('endurance.current')
       die = [ 'endure', '-', '-', '-', '-', '-' ]
@@ -17,3 +20,5 @@ Game.Ability = Ember.Object.extend
       @turnsUntilNextUse = @cooldown
     else
       @turnsUntilNextUse = @cooldown
+
+    if @endsTurn then @owner.acted() else @owner.activate()

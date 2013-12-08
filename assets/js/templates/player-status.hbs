@@ -1,28 +1,34 @@
-<section class="attributes">
+<div class="attributes">
     <header class='attribute'>
-        Agility: {{agility.current}}
+        Agility: {{attributes.agility.current}}
     </header>
     <header class='attribute'>
-        Speed:{{speed.current}}
+        Speed:{{attributes.speed.current}}
     </header>
     <header class='attribute'>
-        Focus: {{focus.current}}
+        Focus: {{attributes.focus.current}}
     </header>
     <header class='attribute'>
-        Detection: {{detection.current}}
+        Detection: {{attributes.detection.current}}
     </header>
     <header class='attribute'>
-        Endurance: {{endurance.current}} ({{endurance.max}})
+        Endurance: {{attributes.endurance.current}} ({{attributes.endurance.max}})
     </header>
     <header class='attribute'>
-    HP: {{hp.current}} ({{hp.max}})
+        HP: {{attributes.hp.current}} ({{attributes.hp.max}})
     </header>
     <header class='attribute'>
-        Genetic Instability: {{instability.current}}
+        Genetic Instability: {{attributes.instability.current}}
     </header>
     <header class='attribute'>
-        Move: {{move.current}} ({{move.max}})
+        Move: {{attributes.move.current}} ({{attributes.move.max}})
     </header>
-</section>
-<section class="abilities">
-</section>
+</div>
+<div class='abilities'>
+    <header class='ability'>
+    <kbd class='light'>1</kbd> {{abilities.movementAbilityOne.name}}
+    </header>
+    <header class='ability'>
+    <kbd class='light'>.</kbd> {{abilities.restAbilityOne.name}}
+    </header>
+</div>

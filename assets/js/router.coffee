@@ -9,7 +9,7 @@ Game.Router.map ->
 Game.SidebarRoute = Ember.Route.extend
   renderTemplate: ->
     statusController = this.controllerFor('playerStatus')
-    statusController.set 'model', Game.pc.attributes
+    statusController.set 'model', Game.pc
     this.render 'player-status',
       outlet: 'player-status'
       controller: statusController
