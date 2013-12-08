@@ -15,7 +15,7 @@ Game.Ability = Ember.Object.extend
     Game.logger.info 'Ability activated: ' + @name
     if @enduring
       #@owner.attributes.decrementProperty('endurance.current')
-      die = [ 'endure', '-', '-', '-', '-', '-' ]
+      die = [ 'endure', 'endure', '-', '-', '-', '-' ]
       enduranceTest = @owner.rollAgainst(die, 'endurance')
       Game.logger.info 'Rolled endurance test with results: ' + enduranceTest.join()
 
