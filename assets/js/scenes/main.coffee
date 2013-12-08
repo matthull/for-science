@@ -17,4 +17,8 @@ Crafty.scene 'Main', ->
 
   Crafty.viewport.follow Game.pc, 0, 0
 
+  Game.logger = Game.Logger.create()
+
   Game.Router.router.transitionTo '/start'
+
+  Game.logger.info 'Welcome to the game!'

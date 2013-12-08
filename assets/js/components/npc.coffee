@@ -21,7 +21,7 @@ Crafty.c 'NPC',
 
   _act: ->
     options = [ 'wait', 'move' ]
-    return this.acted() if _.sample(options) == 'wait'
+    if _.sample(options) == 'wait' then Game.logger.info 'Creature is waiting...'; return this.acted()
 
     destinations = _.map ['left', 'up', 'down', 'right'], (direction) =>
       Game.map.relativeLocation

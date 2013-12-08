@@ -6,6 +6,10 @@ Crafty.c 'Actor',
   act: ->
     this.activate()
     @attributes.set 'move.current', @attributes.get('move.max')
+
+    if @abilities
+      @abilities.forEach (a) -> a.turnsUntilNextUse-- if a.turnsUntilNextUse > 0
+
     this._act() if typeof this._act == 'function'
 
   deactivate: ->
