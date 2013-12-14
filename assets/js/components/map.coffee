@@ -18,6 +18,9 @@ Crafty.c 'Map',
   height: ->
     Game.engine.mapHeight
 
+  obstacles: ->
+    this.getLayers().Obstacles
+
   inbounds: (location) ->
     location.x <= this.width() && location.y <= this.height() && location.x >= 0 && location.y >= 0
 
@@ -33,8 +36,7 @@ Crafty.c 'Map',
     #distance
 
   distanceBetween: (start, end) ->
-    x: start.x - end.x
-    y: start.y - end.y
+    start.x - end.x + start.y - end.y
 
   tilesToPixels: (coord) ->
     coord * Game.engine.tileSize
@@ -43,11 +45,11 @@ Crafty.c 'Map',
     coord / Game.engine.tileSize
 
   blocked: (location) ->
-    _.some Crafty('Solid'), (e) -> Crafty(e).isAt Game.map.tilesToPixels(location.x)+1, Game.map.tilesToPixels(location.y)+1 and
+    _.some Crafty('Solid'), (e) -> Crafty(e).isAt Game.map.tilesToPixels(location.x)+1, Game.map.tilesToPixels(location.y)+1 or
       not Game.map.inbounds location
 
   relativeLocation: (start, direction, distance) ->
-    destination = start
+    destination = x: start.x, y: start.y
     if direction == 'left' then destination.x -= distance
     if direction == 'up' then destination.y -= distance
     if direction == 'right' then destination.x += distance
@@ -55,13 +57,5 @@ Crafty.c 'Map',
 
     destination
 
-  grid: ->
-    grid = new PF.Grid Game.engine.mapWidth, Game.engine.mapHeight
-
-    this.getLayers().Obstacles.forEach (t) ->
-      grid.setWalkableAt(pixelsToTiles(t.x), pixelsToTiles(t.y), false) if t.x
-
-    _.each Crafty('Solid'), (id) ->
-      grid.setWalkableAt(pixelsToTiles(t.x), pixelsToTiles(t.y), false)
-
-    grid
+  tilesSurrounding: (loc) ->
+    ['up', 'down', 'left', 'right'].map (dir) => this.relativeLocation loc, dir, 1

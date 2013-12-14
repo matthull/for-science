@@ -38,13 +38,25 @@ Crafty.c 'Actor',
     y: Game.map.pixelsToTiles(@y)
 
   destinationNextTo: (target) ->
-    # Find if we are above/below or left/right of target
-    aboveTarget = this.location().x < target.location().x
-    leftOfTarget= this.location().y < target.location()
-    # Check 2 nearest tiles to see if they are blocked
-    # If both blocked, start expanding search
+    possibleDestinations = Game.map.tilesSurrounding target
+    # order by nearest to farthest
+    possibleDestinations.sort (d) => Game.map.distanceBetween(this.location(), d)
+    possibleDestinations[0]
 
   pathTo: (target) ->
     finder = new PF.AStarFinder();
     destination = this.destinationNextTo target
-    #finder.findPath this.x.tiles, this.y.tiles, destination.x.tiles, destination.y.tiles, Game.map.grid()
+    if destination == undefined then return Game.logger.debug "All adjacent tiles to target are blocked"
+    finder.findPath this.location().x, this.location().y, destination.x, destination.y, this.pathfindingGrid()
+
+  pathfindingGrid: ->
+    grid = new PF.Grid Game.engine.mapWidth, Game.engine.mapHeight
+
+    Game.map.obstacles().forEach (t) ->
+      grid.setWalkableAt(Game.map.pixelsToTiles(t.x), Game.map.pixelsToTiles(t.y), false) if t.x
+
+    _.each Crafty('Solid'), (id) =>
+      e = Crafty(id)
+      grid.setWalkableAt(Game.map.pixelsToTiles(e.x), Game.map.pixelsToTiles(e.y), false) if id != this[0]
+
+    grid
