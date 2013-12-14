@@ -2,7 +2,7 @@ Crafty.c 'Player',
   init: ->
     this.requires 'Tween'
     this.requires 'Actor'
-    this.requires('MapObject').mapObject 'PC'
+    this.requires('MapObject').mapObject 'PlayerSprite'
     this.requires('Creature').creature
       agility:
         current: 1

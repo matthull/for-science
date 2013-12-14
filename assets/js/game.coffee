@@ -12,9 +12,9 @@ window.startGame = ->
     Crafty.background '#000'
     Crafty.viewport.init engine.viewportWidth, engine.viewportHeight
     Crafty.viewport.clampToEntities = false
-    Crafty.sprite("images/stinger.png", {Stinger: [0,0,engine.tileSize,engine.tileSize]})
-    Crafty.sprite("images/hopper.png", {Hopper: [0,0,engine.tileSize,engine.tileSize]})
-    Crafty.sprite("images/hentacle.png", {Hentacle: [0,0,engine.tileSize,engine.tileSize]})
-    Crafty.sprite("images/lure-64x64.png", {PC: [0,0,engine.tileSize,engine.tileSize]})
+    Crafty.sprite("images/stinger.png", {StingerSprite: [0,0,engine.tileSize,engine.tileSize]})
+    Crafty.sprite("images/hoppy.png", {HoppySprite: [0,0,engine.tileSize,engine.tileSize]})
+    Crafty.sprite("images/hentacle.png", {HentacleSprite: [0,0,engine.tileSize,engine.tileSize]})
+    Crafty.sprite("images/lure-64x64.png", {PlayerSprite: [0,0,engine.tileSize,engine.tileSize]})
 
     Crafty.scene 'Main'
