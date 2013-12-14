@@ -24,15 +24,12 @@ Crafty.c 'NPC',
     if _.sample(options) == 'wait' then Game.logger.info 'Creature is waiting...'; return this.acted()
 
     destinations = _.map ['left', 'up', 'down', 'right'], (direction) =>
-      Game.map.relativeLocation
-        x: @x, y: @y,
-        direction,
-        tiles: 1
+      Game.map.relativeLocation this.location(), direction, 1
 
     availableDestinations = _.filter destinations, (destination) =>
-      (not _.some Crafty('Solid'), (e) => Crafty(e).isAt destination.x, destination.y) and (Game.map.inbounds destination)
+      not Game.map.blocked destination
 
     return this.acted() if availableDestinations.length == 0
     chosenDestination = _.sample availableDestinations
 
-    this.tween {x: chosenDestination.x, y: chosenDestination.y}, Game.engine.movementSpeed, => this.moved()
+    this.tween {x: Game.map.tilesToPixels chosenDestination.x, y: Game.map.tilesToPixels chosenDestination.y}, Game.engine.movementSpeed, => this.moved()

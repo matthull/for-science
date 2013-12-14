@@ -52,17 +52,10 @@ Crafty.c 'Player',
         @abilities[action.name].activate()
 
       if action.type == 'move'
-        destination = Game.map.relativeLocation
-          x: this.x, y: this.y,
-          action.name,
-          tiles: 1
+        destination = Game.map.relativeLocation this.location(), action.name, 1
 
-        if (_.some Crafty('Solid'), (e) -> Crafty(e).isAt destination.x+1, destination.y+1)
-          Game.logger.info "You can't go there! Blocked by obstacle"
-          return this.activate()
-
-        unless (Game.map.inbounds destination)
-          Game.logger.info "You can't go there! Blocked by edge of map"
+        if Game.map.blocked destination
+          Game.logger.info "You can't go there! Your path is blocked"
           return this.activate()
 
         this.moveTo destination

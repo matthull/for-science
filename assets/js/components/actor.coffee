@@ -31,4 +31,20 @@ Crafty.c 'Actor',
       this._act() if typeof this._act == 'function'
 
   moveTo: (destination) ->
-    this.tween {x: destination.x, y: destination.y}, Game.engine.movementSpeed, => this.moved()
+    this.tween {x: Game.map.tilesToPixels(destination.x), y: Game.map.tilesToPixels(destination.y)}, Game.engine.movementSpeed, => this.moved()
+
+  location: ->
+    x: Game.map.pixelsToTiles(@x)
+    y: Game.map.pixelsToTiles(@y)
+
+  destinationNextTo: (target) ->
+    # Find if we are above/below or left/right of target
+    aboveTarget = this.location().x < target.location().x
+    leftOfTarget= this.location().y < target.location()
+    # Check 2 nearest tiles to see if they are blocked
+    # If both blocked, start expanding search
+
+  pathTo: (target) ->
+    finder = new PF.AStarFinder();
+    destination = this.destinationNextTo target
+    #finder.findPath this.x.tiles, this.y.tiles, destination.x.tiles, destination.y.tiles, Game.map.grid()
