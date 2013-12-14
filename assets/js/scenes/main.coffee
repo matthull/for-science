@@ -7,9 +7,20 @@ Crafty.scene 'Main', ->
   Game.pc.attr({x: Game.engine.tileSize * (Math.floor Game.engine.mapWidth / 2), y: Game.engine.tileSize * (Math.floor Game.engine.mapHeight / 2), z: 100})
   Game.engine.queue.append Game.pc
 
-  window.monster = Crafty.e 'NPC'
-  monster.attr({x: Game.pc.x - (Game.engine.tileSize * 3), y: Game.pc.y - (Game.engine.tileSize * 2)})
-  Game.engine.queue.append monster
+  #window.monster = Crafty.e 'NPC'
+  #monster.attr({x: Game.pc.x - (Game.engine.tileSize * 3), y: Game.pc.y - (Game.engine.tileSize * 2)})
+  #Game.engine.queue.append monster
+
+  biome = Crafty.e 'Biome'
+  biome.fill()
+  biome.creatures.forEach (c) ->
+    allNodes = _.flatten c.pathfindingGrid().nodes
+    availableTiles = allNodes.filter((n) -> n.walkable)
+    start = _.sample availableTiles
+    c.x = Game.map.tilesToPixels start.x
+    c.y = Game.map.tilesToPixels start.y
+    Game.engine.queue.append c
+
 
   Game.pc.act()
 

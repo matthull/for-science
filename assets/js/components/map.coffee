@@ -59,3 +59,15 @@ Crafty.c 'Map',
 
   tilesSurrounding: (loc) ->
     ['up', 'down', 'left', 'right'].map (dir) => this.relativeLocation loc, dir, 1
+
+  grid: ->
+    grid = new PF.Grid Game.engine.mapWidth, Game.engine.mapHeight
+
+    Game.map.obstacles().forEach (t) ->
+      grid.setWalkableAt(Game.map.pixelsToTiles(t.x), Game.map.pixelsToTiles(t.y), false) if t.x
+
+    _.each Crafty('Solid'), (id) =>
+      e = Crafty(id)
+      grid.setWalkableAt(Game.map.pixelsToTiles(e.x), Game.map.pixelsToTiles(e.y), false)
+
+    grid

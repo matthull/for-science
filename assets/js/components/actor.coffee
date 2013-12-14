@@ -45,18 +45,11 @@ Crafty.c 'Actor',
 
   pathTo: (target) ->
     finder = new PF.AStarFinder();
-    destination = this.destinationNextTo target
-    if destination == undefined then return Game.logger.debug "All adjacent tiles to target are blocked"
-    finder.findPath this.location().x, this.location().y, destination.x, destination.y, this.pathfindingGrid()
+    destination = this.destinationNextTo target.location()
+    if destination == undefined then Game.logger.debug "All adjacent tiles to target are blocked"
+    else finder.findPath this.location().x, this.location().y, destination.x, destination.y, this.pathfindingGrid()
 
   pathfindingGrid: ->
-    grid = new PF.Grid Game.engine.mapWidth, Game.engine.mapHeight
-
-    Game.map.obstacles().forEach (t) ->
-      grid.setWalkableAt(Game.map.pixelsToTiles(t.x), Game.map.pixelsToTiles(t.y), false) if t.x
-
-    _.each Crafty('Solid'), (id) =>
-      e = Crafty(id)
-      grid.setWalkableAt(Game.map.pixelsToTiles(e.x), Game.map.pixelsToTiles(e.y), false) if id != this[0]
-
+    grid = Game.map.grid()
+    if this.location() then grid.setWalkableAt this.location().x, this.location().y, true
     grid

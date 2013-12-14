@@ -15,13 +15,26 @@ Crafty.c 'NPC',
         current: 2
         max: 2
 
+    @zoneSize = 5
+
     this.requires 'Tween'
     this.requires 'Actor'
-    this.requires('MapObject').mapObject 'Creature1'
 
   _act: ->
+    if @mood == 'aggressive'
+      prey = Crafty('Actor').filter (id) => Game.map.distanceBetween(Crafty(id).location(), this.location())
+      this.approach Game.pc
+    else this.wander()
+
+  approach: (target) ->
+    return this.wait() if Game.map.distanceBetween(this.location(), target.location()) == 1
+    path = this.pathTo target
+    if path[1] then this.moveTo x: path[1][0], y: path[1][1]
+    else this.wait()
+
+  wander: ->
     options = [ 'wait', 'move' ]
-    if _.sample(options) == 'wait' then Game.logger.info 'Creature is waiting...'; return this.acted()
+    if _.sample(options) == 'wait' then return this.wait()
 
     destinations = _.map ['left', 'up', 'down', 'right'], (direction) =>
       Game.map.relativeLocation this.location(), direction, 1
@@ -32,4 +45,8 @@ Crafty.c 'NPC',
     return this.acted() if availableDestinations.length == 0
     chosenDestination = _.sample availableDestinations
 
-    this.tween {x: Game.map.tilesToPixels chosenDestination.x, y: Game.map.tilesToPixels chosenDestination.y}, Game.engine.movementSpeed, => this.moved()
+    this.moveTo chosenDestination
+
+  wait: ->
+    Game.logger.info 'Creature is waiting...'
+    return this.acted()

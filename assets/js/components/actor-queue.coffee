@@ -13,5 +13,6 @@ Crafty.c 'ActorQueue',
     @actors[@index]
 
   advance: ->
+    current = this.current()
     if @index == @actors.length - 1 then @index = 0 else @index++
-    @current()
+    current
