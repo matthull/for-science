@@ -24,19 +24,13 @@ Crafty.c 'Map',
   inbounds: (location) ->
     location.x <= this.width() && location.y <= this.height() && location.x >= 0 && location.y >= 0
 
-  #distance: (distance) -> if distance.pixels and distance.tiles
-        #return distance
-    #else if distance.pixels
-      #distance.tiles = distance.pixels / Game.engine.tileSize
-    #else if distance.tiles
-      #distance.pixels = distance.tiles * Game.engine.tileSize
-    #else
-      #throw 'You need to specify either pixels or tiles to get distance!'
-
-    #distance
-
   distanceBetween: (start, end) ->
-    start.x - end.x + start.y - end.y
+    x: Math.abs(start.x - end.x)
+    y: Math.abs(start.y - end.y)
+
+  totalDistanceBetween: (start, end) ->
+    dist = this.distanceBetween(start, end)
+    dist.x + dist.y
 
   tilesToPixels: (coord) ->
     coord * Game.engine.tileSize

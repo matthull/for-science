@@ -22,12 +22,12 @@ Crafty.c 'NPC',
 
   _act: ->
     if @mood == 'aggressive'
-      prey = Crafty('Actor').filter (id) => Game.map.distanceBetween(Crafty(id).location(), this.location())
+      prey = Crafty('Actor').filter (id) => Game.map.totalDistanceBetween(Crafty(id).location(), this.location())
       this.approach Game.pc
     else this.wander()
 
   approach: (target) ->
-    return this.wait() if Game.map.distanceBetween(this.location(), target.location()) == 1
+    return this.wait() if Game.map.totalDistanceBetween(this.location(), target.location()) == 1
     path = this.pathTo target
     if path[1] then this.moveTo x: path[1][0], y: path[1][1]
     else this.wait()

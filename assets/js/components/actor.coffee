@@ -31,7 +31,9 @@ Crafty.c 'Actor',
       this._act() if typeof this._act == 'function'
 
   moveTo: (destination) ->
-    this.tween {x: Game.map.tilesToPixels(destination.x), y: Game.map.tilesToPixels(destination.y)}, Game.engine.movementSpeed, => this.moved()
+    distanceFromPlayer = Game.map.distanceBetween this.location(), Game.pc.location()
+    transitionSpeed = if Math.max(distanceFromPlayer.x, distanceFromPlayer.y) < 7 then Game.engine.movementSpeed else 0
+    this.tween {x: Game.map.tilesToPixels(destination.x), y: Game.map.tilesToPixels(destination.y)}, transitionSpeed, => this.moved()
 
   location: ->
     x: Game.map.pixelsToTiles(@x)
@@ -40,7 +42,7 @@ Crafty.c 'Actor',
   destinationNextTo: (target) ->
     possibleDestinations = Game.map.tilesSurrounding target
     # order by nearest to farthest
-    possibleDestinations.sort (d) => Game.map.distanceBetween(this.location(), d)
+    possibleDestinations.sort (d) => Game.map.totalDistanceBetween(this.location(), d)
     possibleDestinations[0]
 
   pathTo: (target) ->
