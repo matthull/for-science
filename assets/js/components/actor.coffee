@@ -19,7 +19,7 @@ Crafty.c 'Actor',
 
   acted: ->
     this.deactivate()
-    Crafty.trigger 'acted'
+    Crafty.trigger 'acted', this
 
   moved: ->
     @attributes.decrementProperty('move.current')

@@ -13,7 +13,7 @@ Crafty.c 'Hoppy',
     ['bugLegs1', 'bugTail1', 'bugHead1'].forEach (part) =>
       e = Crafty.e('Canvas, 2D, Sprite, SpriteAnimation, ' + part)
       this.attach e
-      e.reel "bounce", 500, 0, 0, 3
+      e.reel "bounce", 1000, 0, 0, 3
       e.animate "bounce", -1
 
     @mood = 'indifferent'

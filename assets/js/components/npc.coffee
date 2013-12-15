@@ -15,16 +15,39 @@ Crafty.c 'NPC',
         current: 2
         max: 2
 
-    @zoneSize = 5
-
     this.requires 'Tween'
     this.requires 'Actor'
 
+    @relations = []
+    @zoneOfInterest = 5
+
+    Crafty.bind 'acted', (actor) =>
+      return if actor[0] == this[0]
+      if relation = this.getRelationTo actor
+        relation.level += 1
+      else if Game.map.totalDistanceBetween(this.location(), actor.location()) <= @zoneOfInterest
+        this.addRelationTo actor, 'threat', 1
+
+  addRelationTo: (actor, type, level) ->
+    throw "Already has relation of type #{type} with actor #{actor[0]}" if this.getRelationTo(actor)
+    @relations.push {to: actor, type: type, level: level}
+
+  getRelationTo: (actor) ->
+    @relations.filter((r) -> r.to == actor)[0]
+
+  removeRelationTo: (actor) ->
+    @relations = @relations.reject (r) -> r.to[0] == actor[0]
+
   _act: ->
-    if @mood == 'aggressive'
-      prey = Crafty('Actor').filter (id) => Game.map.totalDistanceBetween(Crafty(id).location(), this.location())
-      this.approach Game.pc
-    else this.wander()
+    @relations.forEach (r) =>
+      if Game.map.totalDistanceBetween(this.location(), r.to.location()) > @zoneOfInterest
+        this.removeRelationTo r.to
+
+    #if @mood == 'aggressive'
+      #prey = Crafty('Actor').filter (id) => Game.map.totalDistanceBetween(Crafty(id).location(), this.location())
+      #this.approach Game.pc
+    #else this.wander()
+    this.wander()
 
   approach: (target) ->
     return this.wait() if Game.map.totalDistanceBetween(this.location(), target.location()) == 1
