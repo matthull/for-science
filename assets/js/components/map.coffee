@@ -1,6 +1,6 @@
 Crafty.c 'Map',
   init: ->
-    this.requires '2D, DOM, TiledMapBuilder'
+    this.requires '2D, Canvas, TiledMapBuilder'
 
   map: (source) ->
     this.setMapDataSource source

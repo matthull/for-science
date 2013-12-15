@@ -21,6 +21,10 @@ Crafty.scene 'Main', ->
     c.y = Game.map.tilesToPixels start.y
     Game.engine.queue.append c
 
+  window.pet = Crafty.e 'Hoppy'
+  pet.x = Game.map.tilesToPixels(Game.pc.location().x - 2)
+  pet.y = Game.map.tilesToPixels(Game.pc.location().y - 2)
+  Game.engine.queue.append pet
 
   Game.pc.act()
 
