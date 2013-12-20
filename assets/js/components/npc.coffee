@@ -20,23 +20,29 @@ Crafty.c 'NPC',
 
     @relations = []
     @zoneOfInterest = 5
+    @threatDie = Crafty.e('Die').die ['threatened']
+    @skittishness = 3
 
     Crafty.bind 'acted', (actor) =>
       return if actor[0] == this[0]
-      if relation = this.getRelationTo actor
-        relation.level += 1
+      if relation = this.relationTo actor
+        relation.level += 1 if @threatDie.roll() == 'threatened'
       else if Game.map.totalDistanceBetween(this.location(), actor.location()) <= @zoneOfInterest
-        this.addRelationTo actor, 'threat', 1
+        this.addRelationTo actor, 'threat', 0
 
   addRelationTo: (actor, type, level) ->
-    throw "Already has relation of type #{type} with actor #{actor[0]}" if this.getRelationTo(actor)
-    @relations.push {to: actor, type: type, level: level}
+    throw "Already has relation of type #{type} with actor #{actor[0]}" if this.relationTo(actor)
+    rel = {to: actor, type: type, level: level}
+    @relations.push rel
+    rel
 
-  getRelationTo: (actor) ->
+  relationTo: (actor) ->
     @relations.filter((r) -> r.to == actor)[0]
 
   removeRelationTo: (actor) ->
+    origLength = @relations.length
     @relations = @relations.reject (r) -> r.to[0] == actor[0]
+    if @relations.length == origLength then false else true
 
   _act: ->
     @relations.forEach (r) =>
